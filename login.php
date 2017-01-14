@@ -15,7 +15,7 @@ if(isset($_POST['login'])){
 			echo "Prepared statment failed: (".$conn->errno.")".$conn->error;
 		}
 		//execucao dividida em bind depois execute
-		if(!($statement->bind_param("i", $login))){
+		if(!($statement->bind_param("s", $login))){
 			echo "Binding paramters failed:(".$statement->errno.")".$statement->error;
 		}
 		if(!($statement->execute())){

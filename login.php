@@ -10,9 +10,23 @@ if(isset($_POST['login'])){
 				'msg'=>'Login/Senha devem ser preenchidos'
 		);
 	}else{
-		$sql= "select login,senha from usuario where login = '$login'";
-		$result =mysql_query($sql,$conn);
-		if($row = mysql_fetch_assoc($result)){
+		//prepared statment 
+		if(!($statement= $conn->prepare("select login,senha from usuario where login = ?"))){
+			echo "Prepared statment failed: (".$conn->errno.")".$conn->error;
+		}
+		//execucao dividida em bind depois execute
+		if(!($statement->bind_param("i", $login))){
+			echo "Binding paramters failed:(".$statement->errno.")".$statement->error;
+		}
+		if(!($statement->execute())){
+			echo "Statment execute failed:(".$statement->errno.")".$statement->error;
+		}
+		if(!($result =$statement->get_result())){
+			echo "Erro Obtendo resultados:(".$statement->errno.")".$statement->error;
+		}
+		
+		$statement->close();
+		if($row = $result->fetch_assoc()){
 			if($row['senha']==$senha){
 				//Login realizado com sucesso,salvamos sessao
 				$_SESSION['login']=$login;

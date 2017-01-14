@@ -2,8 +2,10 @@
 $dbhost ='localhost';
 $dbuser ='root';
 $dbpass='admin';
-$conn = mysql_connect($dbhost,$dbuser,$dbpass)
-	or die('Não foi possivel conectar');
 $dbname='locadora';
-mysql_select_db($dbname);
+$conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+if($conn->connect_error){
+	echo("Nao foi possivel conectar: (".$conn->connect_errno.") ".$conn->connect_error." ");
+}
+
 ?>

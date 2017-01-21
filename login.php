@@ -3,8 +3,17 @@ require_once 'conexao.php';
 session_start();
 
 if(isset($_POST['login'])){
-	$login=$_POST['login'];
-	$senha=$_POST['senha'];
+	$pattern="/[a-zA-Z0-9_]{1,12}/";
+	/*
+	 * whitelist, verificação se entrada do usuário atende ao padrao de login válido
+	 * 
+	 */
+	if(preg_match($pattern,$_POST['login'],$matches)){
+		$login =$matches[0];//passar para verificar apenas o que casa
+		$senha=$_POST['senha'];
+	}
+	
+	
 	if((trim($login)=="") || (trim($senha)=="")){
 		$mensagem= array('status'=>false,
 				'msg'=>'Login/Senha devem ser preenchidos'
